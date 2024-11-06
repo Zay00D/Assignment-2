@@ -335,19 +335,31 @@ class Order:
 
     def __init__(self, customer, order_number: str):
         self._order_number = order_number
-        self._order_date = datetime.now()  # Automatically sets the current date
-        self._items = []  # List to hold OrderItem instances
+        self._order_date = datetime.now()
+        self._items = []
         self._total_amount = 0.0
         self._is_discount_applied = False
-        self._discount_amount = 0.0  # Track the total discount applied
-        self._final_amount = 0.0     # Track the final amount after discount
+        self._discount_amount = 0.0
+        self._final_amount = 0.0
         self._customer = customer
 
     def add_order_item(self, order_item):
         """Adds an item to the order."""
         if isinstance(order_item, OrderItem):
             self._items.append(order_item)
-            self._total_amount += order_item.get_subtotal()  # Update the total amount with the item's subtotal
+            self._total_amount += order_item.get_subtotal()
+
+    def apply_discounts(self, discount):
+        """Applies discounts using the Discount object."""
+        self._is_discount_applied = True
+        # Apply bulk discount if applicable
+        if discount.get_bulkDiscount() > 0:
+            for item in self._items:
+                item.set_priceAfterDiscount(item.get_priceAfterDiscount() * (1 - discount.get_bulkDiscount()))
+        
+        # Calculate the final amount after applying the discount
+        self._discount_amount = self._total_amount - sum(item.get_subtotal() for item in self._items)
+        self._final_amount = sum(item.get_subtotal() for item in self._items)
 
     def calculate_total_amount(self):
         """Calculates the total amount for the order."""
@@ -370,7 +382,9 @@ class Order:
         return f"Order Number: {self._order_number}, Order Total: ${self._total_amount:.2f}, Final Amount: ${self._final_amount:.2f}"
 
 
+
 ##TEST
+print("Test Case 1:")
 
 if __name__ == "__main__":
     # Step 1: Create an EBook instance
@@ -419,6 +433,67 @@ if __name__ == "__main__":
         priceNoDiscount=ebook1.get_price() * cart_item.get_quantity(), 
         discountApplied=ebook1.get_price() * 0.1 * cart_item.get_quantity(), 
         finalPriceTax=(ebook1.get_price() * 0.9 * cart_item.get_quantity()) * 1.08  # Assuming 8% tax
+    )
+    print("\n=== Invoice Generated ===")
+    print("Invoice generated:", invoice)
+
+print("--------------------------------------------")
+
+print("Test Case 2:")
+
+if __name__ == "__main__":
+    # Step 1: Create an EBook instance
+    ebook1 = EBook("Car World", "Tom Sparks", date(2019, 4, 9), 20.00)
+    print("\n=== EBook Information ===")
+    print("EBook created:", ebook1)
+
+    # Step 2: Create a Customer instance without loyalty membership
+    customer1 = Customer("Mohammed", date(1998, 1, 25), False, "054-1110009")
+    print("\n=== Customer Information ===")
+    print("Customer created:", customer1)
+
+    # Step 3: Create a CartItem instance and add it to the shopping cart
+    # Assuming bulk discount applies to orders with quantity >= 5
+    cart_item = CartItem(ebook=ebook1.get_title(), quantity=5)
+    shopping_cart = ShoppingCart(
+        cartId="#98706", 
+        items=cart_item.get_ebook(), 
+        quantity=str(cart_item.get_quantity()), 
+        totalItems=ebook1.get_price() * cart_item.get_quantity()
+    )
+    print("\n=== Shopping Cart ===")
+    print("Shopping Cart created with items:", shopping_cart)
+
+    # Step 4: Create an OrderItem instance with a bulk discount applied
+    # Assuming a 20% bulk discount on orders with 5 or more items
+    bulk_discounted_price = ebook1.get_price() * 0.8  # 20% bulk discount
+    order_item = OrderItem(ebook=ebook1.get_title(), quantity=5, priceAfterDiscount=bulk_discounted_price)
+    print("\n=== OrderItem with Bulk Discounted Price ===")
+    print("OrderItem created with discounted price:", order_item)
+
+    # Step 5: Create an Order and add the OrderItem to it
+    order = Order(customer=customer1, order_number="ORD98706")
+    order.add_order_item(order_item)
+    print("\n=== Order Created ===")
+    print("Order created:", order)
+    print("\nOrder Summary Before Discount:")
+    print(order.get_order_summary())
+
+    # Step 6: Apply a Bulk Discount
+    # We pass the discount object with only bulk discount; loyalty discount will not apply as customer is not a loyalty member.
+    discount = Discount(loyaltyDiscount=0.10, bulkDiscount=0.20, totalDiscount="20%", price=bulk_discounted_price)
+    order.apply_discounts(discount)  # This applies only the bulk discount
+    print("\n=== Discount Applied ===")
+    print("Discount created:", discount)
+    print("\nOrder Summary After Discount:")
+    print(order.get_order_summary())
+
+    # Step 7: Generate an Invoice based on the order
+    invoice = Invoice(
+        orderNumber="INV98706", 
+        priceNoDiscount=ebook1.get_price() * cart_item.get_quantity(), 
+        discountApplied=ebook1.get_price() * 0.2 * cart_item.get_quantity(),  # Calculating bulk discount of 20%
+        finalPriceTax=(ebook1.get_price() * 0.8 * cart_item.get_quantity()) * 1.08  # Assuming 8% tax on discounted price
     )
     print("\n=== Invoice Generated ===")
     print("Invoice generated:", invoice)
