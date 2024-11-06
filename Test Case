@@ -1,0 +1,424 @@
+from datetime import datetime, date
+
+class CartItem:
+    """
+    Represents an individual e-book in the shopping cart with a quantity.
+    """
+
+    def __init__(self, ebook: str, quantity: int):
+        self._ebook = ebook
+        self._quantity = quantity
+
+    def get_ebook(self) -> str:
+        """Returns the ebook title."""
+        return self._ebook
+
+    def set_ebook(self, ebook: str):
+        """Sets the ebook title."""
+        self._ebook = ebook
+
+    def get_quantity(self) -> int:
+        """Returns the quantity of the ebook."""
+        return self._quantity
+
+    def set_quantity(self, quantity: int):
+        """Sets the quantity of the ebook."""
+        self._quantity = quantity
+
+    def __str__(self):
+        """Returns a string representation of the cart item."""
+        return f"{self._ebook} x {self._quantity}"
+    
+
+    
+class ShoppingCart:
+    """
+    Manages a customer's shopping cart.
+    """
+
+    def __init__(self, cartId: str, items: str = "", quantity: str = "", totalItems: float = 0.0):
+        self._items = items  # Assumed as a single item title for simplicity, though in practice it should be a list
+        self._quantity = quantity
+        self._cartId = cartId
+        self._totalItems = totalItems
+
+    def get_items(self) -> str:
+        """Returns the items in the cart."""
+        return self._items
+
+    def set_items(self, items: str):
+        """Sets the items in the cart."""
+        self._items = items
+
+    def get_quantity(self) -> str:
+        """Returns the quantity of items in the cart."""
+        return self._quantity
+
+    def set_quantity(self, quantity: str):
+        """Sets the quantity of items in the cart."""
+        self._quantity = quantity
+
+    def get_cartId(self) -> str:
+        """Returns the cart ID."""
+        return self._cartId
+
+    def set_cartId(self, cartId: str):
+        """Sets the cart ID."""
+        self._cartId = cartId
+
+    def get_totalItems(self) -> float:
+        """Returns the total number of items in the cart."""
+        return self._totalItems
+
+    def set_totalItems(self, totalItems: float):
+        """Sets the total number of items in the cart."""
+        self._totalItems = totalItems
+
+    def calculate_total(self) -> float:
+        """Calculates the total cost of items in the cart."""
+        return self._totalItems
+
+    def __str__(self):
+        """Provides a summary of the shopping cart."""
+        return (f"Cart ID: {self._cartId}\n"
+                f"Items: {self._items}\n"
+                f"Quantity: {self._quantity}\n"
+                f"Total Items: {self._totalItems:.2f}")
+    
+    
+class Customer:
+    """
+    Represents a customer with account and loyalty information.
+    """
+
+    def __init__(self, name: str, dateOfBirth, loyalty: bool, phoneNumber: str):
+        self._name = name
+        self._dateOfBirth = dateOfBirth
+        self._loyalty = loyalty
+        self._phoneNumber = phoneNumber
+
+    def get_name(self) -> str:
+        """Returns the customer's name."""
+        return self._name
+
+    def set_name(self, name: str):
+        """Sets the customer's name."""
+        self._name = name
+
+    def get_dateOfBirth(self):
+        """Returns the customer's date of birth."""
+        return self._dateOfBirth
+
+    def set_dateOfBirth(self, dateOfBirth):
+        """Sets the customer's date of birth."""
+        self._dateOfBirth = dateOfBirth
+
+    def get_loyalty(self) -> bool:
+        """Returns whether the customer is a loyalty program member."""
+        return self._loyalty
+
+    def set_loyalty(self, loyalty: bool):
+        """Sets the customer's loyalty program status."""
+        self._loyalty = loyalty
+
+    def get_phoneNumber(self) -> str:
+        """Returns the customer's phone number."""
+        return self._phoneNumber
+
+    def set_phoneNumber(self, phoneNumber: str):
+        """Sets the customer's phone number."""
+        self._phoneNumber = phoneNumber
+
+    def __str__(self):
+        """Returns a string representation of the customer."""
+        return (f"Customer: {self._name}, Date of Birth: {self._dateOfBirth}, "
+                f"Loyalty Member: {self._loyalty}, Phone Number: {self._phoneNumber}")
+
+
+class Discount:
+    """
+    Manages and applies discounts to an order.
+    """
+
+    def __init__(self, loyaltyDiscount: float = 0.10, bulkDiscount: float = 0.20, totalDiscount: str = "", price: float = 0.0):
+        self._loyaltyDiscount = loyaltyDiscount
+        self._bulkDiscount = bulkDiscount
+        self._totalDiscount = totalDiscount
+        self._price = price
+
+    def get_loyaltyDiscount(self) -> float:
+        """Returns the loyalty discount rate."""
+        return self._loyaltyDiscount
+
+    def set_loyaltyDiscount(self, loyaltyDiscount: float):
+        """Sets the loyalty discount rate."""
+        self._loyaltyDiscount = loyaltyDiscount
+
+    def get_bulkDiscount(self) -> float:
+        """Returns the bulk discount rate."""
+        return self._bulkDiscount
+
+    def set_bulkDiscount(self, bulkDiscount: float):
+        """Sets the bulk discount rate."""
+        self._bulkDiscount = bulkDiscount
+
+    def get_totalDiscount(self) -> str:
+        """Returns the total discount as a string."""
+        return self._totalDiscount
+
+    def set_totalDiscount(self, totalDiscount: str):
+        """Sets the total discount as a string."""
+        self._totalDiscount = totalDiscount
+
+    def get_price(self) -> float:
+        """Returns the price after discounts."""
+        return self._price
+
+    def set_price(self, price: float):
+        """Sets the price after discounts."""
+        self._price = price
+
+    def __str__(self):
+        """Provides a summary of the discounts applied."""
+        return (f"Loyalty Discount: {self._loyaltyDiscount * 100}%, "
+                f"Bulk Discount: {self._bulkDiscount * 100}%, "
+                f"Total Discount: {self._totalDiscount}, Price: ${self._price:.2f}")
+
+
+class EBook:
+    """
+    Represents an individual e-book in the store catalog.
+    """
+
+    def __init__(self, title: str, author: str, publication, price: float):
+        self._title = title
+        self._author = author
+        self._publication = publication
+        self._price = price
+
+    def get_title(self) -> str:
+        """Returns the title of the e-book."""
+        return self._title
+
+    def set_title(self, title: str):
+        """Sets the title of the e-book."""
+        self._title = title
+
+    def get_author(self) -> str:
+        """Returns the author of the e-book."""
+        return self._author
+
+    def set_author(self, author: str):
+        """Sets the author of the e-book."""
+        self._author = author
+
+    def get_publication(self):
+        """Returns the publication date of the e-book."""
+        return self._publication
+
+    def set_publication(self, publication):
+        """Sets the publication date of the e-book."""
+        self._publication = publication
+
+    def get_price(self) -> float:
+        """Returns the price of the e-book."""
+        return self._price
+
+    def set_price(self, price: float):
+        """Sets the price of the e-book."""
+        self._price = price
+
+    def __str__(self):
+        """Returns a string representation of the e-book details."""
+        return (f"Title: {self._title}, Author: {self._author}, "
+                f"Publication Date: {self._publication}, Price: ${self._price:.2f}")
+
+
+class Invoice:
+    """
+    Generates an invoice for each order.
+    """
+
+    def __init__(self, orderNumber: str, priceNoDiscount: float, discountApplied: float, finalPriceTax: float):
+        self._orderNumber = orderNumber
+        self._priceNoDiscount = priceNoDiscount
+        self._discountApplied = discountApplied
+        self._finalPriceTax = finalPriceTax
+
+    def get_orderNumber(self) -> str:
+        """Returns the order number."""
+        return self._orderNumber
+
+    def set_orderNumber(self, orderNumber: str):
+        """Sets the order number."""
+        self._orderNumber = orderNumber
+
+    def get_priceNoDiscount(self) -> float:
+        """Returns the price without discount."""
+        return self._priceNoDiscount
+
+    def set_priceNoDiscount(self, priceNoDiscount: float):
+        """Sets the price without discount."""
+        self._priceNoDiscount = priceNoDiscount
+
+    def get_discountApplied(self) -> float:
+        """Returns the discount applied."""
+        return self._discountApplied
+
+    def set_discountApplied(self, discountApplied: float):
+        """Sets the discount applied."""
+        self._discountApplied = discountApplied
+
+    def get_finalPriceTax(self) -> float:
+        """Returns the final price with tax."""
+        return self._finalPriceTax
+
+    def set_finalPriceTax(self, finalPriceTax: float):
+        """Sets the final price with tax."""
+        self._finalPriceTax = finalPriceTax
+
+    def __str__(self):
+        """Returns a formatted invoice summary."""
+        return (f"Order Number: {self._orderNumber}\n"
+                f"Price without Discount: ${self._priceNoDiscount:.2f}\n"
+                f"Discount Applied: ${self._discountApplied:.2f}\n"
+                f"Final Price with Tax: ${self._finalPriceTax:.2f}")
+
+
+class OrderItem:
+    """
+    Represents an individual item within an order.
+    """
+
+    def __init__(self, ebook: str, quantity: int, priceAfterDiscount: float):
+        self._ebook = ebook
+        self._quantity = quantity
+        self._priceAfterDiscount = priceAfterDiscount
+
+    def get_ebook(self) -> str:
+        """Returns the ebook title."""
+        return self._ebook
+
+    def set_ebook(self, ebook: str):
+        """Sets the ebook title."""
+        self._ebook = ebook
+
+    def get_quantity(self) -> int:
+        """Returns the quantity of the ebook."""
+        return self._quantity
+
+    def set_quantity(self, quantity: int):
+        """Sets the quantity of the ebook."""
+        self._quantity = quantity
+
+    def get_priceAfterDiscount(self) -> float:
+        """Returns the price after discount for a single unit of the ebook."""
+        return self._priceAfterDiscount
+
+    def set_priceAfterDiscount(self, priceAfterDiscount: float):
+        """Sets the price after discount for a single unit of the ebook."""
+        self._priceAfterDiscount = priceAfterDiscount
+
+    def get_subtotal(self) -> float:
+        """Returns the total price for this order item after discounts."""
+        return self._priceAfterDiscount * self._quantity
+
+    def __str__(self):
+        """Returns a string representation of the order item."""
+        return f"{self._ebook} x {self._quantity} (Discounted Price per Unit: ${self._priceAfterDiscount:.2f})"
+
+
+class Order:
+    """
+    Represents an order placed by the customer.
+    """
+
+    def __init__(self, customer, order_number: str):
+        self._order_number = order_number
+        self._order_date = datetime.now()  # Automatically sets the current date
+        self._items = []  # List to hold OrderItem instances
+        self._total_amount = 0.0
+        self._is_discount_applied = False
+        self._discount_amount = 0.0  # Track the total discount applied
+        self._final_amount = 0.0     # Track the final amount after discount
+        self._customer = customer
+
+    def add_order_item(self, order_item):
+        """Adds an item to the order."""
+        if isinstance(order_item, OrderItem):
+            self._items.append(order_item)
+            self._total_amount += order_item.get_subtotal()  # Update the total amount with the item's subtotal
+
+    def calculate_total_amount(self):
+        """Calculates the total amount for the order."""
+        return self._total_amount
+
+    def get_order_summary(self):
+        """Returns a detailed summary of the order."""
+        item_summary = "\n".join([str(item) for item in self._items])
+        discount_info = f"Discount Applied: ${self._discount_amount:.2f}" if self._is_discount_applied else "No discount applied"
+        return (f"Order Number: {self._order_number}\n"
+                f"Order Date: {self._order_date.strftime('%Y-%m-%d %H:%M:%S')}\n"
+                f"Customer: {self._customer}\n"
+                f"Items:\n{item_summary}\n"
+                f"Total Amount: ${self._total_amount:.2f}\n"
+                f"{discount_info}\n"
+                f"Final Amount after Discount: ${self._final_amount:.2f}")
+
+    def __str__(self):
+        """Returns a summary of the order."""
+        return f"Order Number: {self._order_number}, Order Total: ${self._total_amount:.2f}, Final Amount: ${self._final_amount:.2f}"
+
+
+##TEST
+
+if __name__ == "__main__":
+    # Step 1: Create an EBook instance
+    ebook1 = EBook("Learn Python", "John Doe", date(2023, 5, 10), 30.00)
+    print("\n=== EBook Information ===")
+    print("EBook created:", ebook1)
+
+    # Step 2: Create a Customer instance
+    customer1 = Customer("Zayed Alkatheeri", date(2002, 11, 24), True, "054-3087888")
+    print("\n=== Customer Information ===")
+    print("Customer created:", customer1)
+
+    # Step 3: Create a CartItem instance and add it to the shopping cart
+    cart_item = CartItem(ebook=ebook1.get_title(), quantity=2)
+    shopping_cart = ShoppingCart(
+        cartId="#27834", 
+        items=cart_item.get_ebook(), 
+        quantity=str(cart_item.get_quantity()), 
+        totalItems=ebook1.get_price() * cart_item.get_quantity()
+    )
+    print("\n=== Shopping Cart ===")
+    print("Shopping Cart created with items:", shopping_cart)
+
+    # Step 4: Create an OrderItem instance with a discount applied
+    discounted_price = ebook1.get_price() * 0.9  # Assuming a 10% discount
+    order_item = OrderItem(ebook=ebook1.get_title(), quantity=2, priceAfterDiscount=discounted_price)
+    print("\n=== OrderItem with Discounted Price ===")
+    print("OrderItem created with discounted price:", order_item)
+
+    # Step 5: Create an Order and add the OrderItem to it
+    order = Order(customer=customer1, order_number="ORD27834")
+    order.add_order_item(order_item)
+    print("\n=== Order Created ===")
+    print("Order created:", order)
+    print("\nOrder Summary:")
+    print(order.get_order_summary())
+
+    # Step 6: Apply a Discount
+    discount = Discount(loyaltyDiscount=0.10, bulkDiscount=0.20, totalDiscount="10%", price=discounted_price)
+    print("\n=== Discount Applied ===")
+    print("Discount created:", discount)
+
+    # Step 7: Generate an Invoice based on the order
+    invoice = Invoice(
+        orderNumber="INV27834", 
+        priceNoDiscount=ebook1.get_price() * cart_item.get_quantity(), 
+        discountApplied=ebook1.get_price() * 0.1 * cart_item.get_quantity(), 
+        finalPriceTax=(ebook1.get_price() * 0.9 * cart_item.get_quantity()) * 1.08  # Assuming 8% tax
+    )
+    print("\n=== Invoice Generated ===")
+    print("Invoice generated:", invoice)
