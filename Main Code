@@ -335,19 +335,31 @@ class Order:
 
     def __init__(self, customer, order_number: str):
         self._order_number = order_number
-        self._order_date = datetime.now()  # Automatically sets the current date
-        self._items = []  # List to hold OrderItem instances
+        self._order_date = datetime.now()
+        self._items = []
         self._total_amount = 0.0
         self._is_discount_applied = False
-        self._discount_amount = 0.0  # Track the total discount applied
-        self._final_amount = 0.0     # Track the final amount after discount
+        self._discount_amount = 0.0
+        self._final_amount = 0.0
         self._customer = customer
 
     def add_order_item(self, order_item):
         """Adds an item to the order."""
         if isinstance(order_item, OrderItem):
             self._items.append(order_item)
-            self._total_amount += order_item.get_subtotal()  # Update the total amount with the item's subtotal
+            self._total_amount += order_item.get_subtotal()
+
+    def apply_discounts(self, discount):
+        """Applies discounts using the Discount object."""
+        self._is_discount_applied = True
+        # Apply bulk discount if applicable
+        if discount.get_bulkDiscount() > 0:
+            for item in self._items:
+                item.set_priceAfterDiscount(item.get_priceAfterDiscount() * (1 - discount.get_bulkDiscount()))
+        
+        # Calculate the final amount after applying the discount
+        self._discount_amount = self._total_amount - sum(item.get_subtotal() for item in self._items)
+        self._final_amount = sum(item.get_subtotal() for item in self._items)
 
     def calculate_total_amount(self):
         """Calculates the total amount for the order."""
